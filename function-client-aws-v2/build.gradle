@@ -15,3 +15,9 @@ dependencies {
     testImplementation libs.micronaut.function.groovy
     testImplementation libs.micronaut.runtime.groovy
 }
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
+}

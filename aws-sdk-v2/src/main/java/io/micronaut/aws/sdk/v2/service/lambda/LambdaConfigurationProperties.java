@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Configuration properties for Lambda.
  *
- * @since 3.7.1
+ * @since 3.8.0
  */
 @ConfigurationProperties(LambdaClient.SERVICE_NAME)
 public class LambdaConfigurationProperties extends AWSConfiguration {

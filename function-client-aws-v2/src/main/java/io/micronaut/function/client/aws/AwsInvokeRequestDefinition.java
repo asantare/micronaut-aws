@@ -29,9 +29,9 @@ import software.amazon.awssdk.services.lambda.model.InvokeRequest;
  * @author graemerocher
  * @since 1.0
  */
-@EachProperty(AWSInvokeRequestDefinition.AWS_LAMBDA_FUNCTIONS)
+@EachProperty(AwsInvokeRequestDefinition.AWS_LAMBDA_FUNCTIONS)
 @Requires(classes = InvokeRequest.class)
-public class AWSInvokeRequestDefinition implements FunctionDefinition {
+public class AwsInvokeRequestDefinition implements FunctionDefinition {
     public static final String AWS_LAMBDA_FUNCTIONS = AWSConfiguration.PREFIX + ".lambda.functions";
 
     @ConfigurationBuilder(prefixes = {""}, excludes = {"profileFile", "applyMutation"})
@@ -39,13 +39,12 @@ public class AWSInvokeRequestDefinition implements FunctionDefinition {
 
     private final String name;
 
-
     /**
      * Constructor.
      *
      * @param name configured name from a property
      */
-    public AWSInvokeRequestDefinition(@Parameter String name) {
+    public AwsInvokeRequestDefinition(@Parameter String name) {
         this.name = name;
         this.invokeRequestBuilder = InvokeRequest.builder();
         this.invokeRequestBuilder.functionName(name);

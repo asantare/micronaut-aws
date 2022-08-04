@@ -55,10 +55,10 @@ class AwsLambdaInvokeSpec extends Specification {
 
         expect:
         definitions.size() == 1
-        definitions.first() instanceof AWSInvokeRequestDefinition
+        definitions.first() instanceof AwsInvokeRequestDefinition
 
         when:
-        AWSInvokeRequestDefinition invokeRequestDefinition = (AWSInvokeRequestDefinition) definitions.first()
+        AwsInvokeRequestDefinition invokeRequestDefinition = (AwsInvokeRequestDefinition) definitions.first()
 
         then:
         invokeRequestDefinition.name == 'test'

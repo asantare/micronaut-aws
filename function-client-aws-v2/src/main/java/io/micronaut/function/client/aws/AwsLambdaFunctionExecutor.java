@@ -49,7 +49,7 @@ import java.util.concurrent.ExecutorService;
  */
 @Requires(beans = LambdaAsyncClient.class)
 @Singleton
-public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, FunctionInvokerChooser {
+public class AwsLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, FunctionInvokerChooser {
 
     private static final int STATUS_CODE_ERROR = 300;
     private final LambdaAsyncClient asyncClient;
@@ -65,7 +65,7 @@ public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, F
      * @param jsonMediaTypeCodec jsonMediaTypeCodec
      * @param ioExecutor         ioExecutor
      */
-    protected AWSLambdaFunctionExecutor(
+    protected AwsLambdaFunctionExecutor(
         LambdaAsyncClient asyncClient,
         ByteBufferFactory byteBufferFactory,
         JsonMediaTypeCodec jsonMediaTypeCodec,
@@ -79,10 +79,10 @@ public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, F
 
     @Override
     public O invoke(FunctionDefinition definition, I input, Argument<O> outputType) {
-        if (!(definition instanceof AWSInvokeRequestDefinition)) {
+        if (!(definition instanceof AwsInvokeRequestDefinition)) {
             throw new IllegalArgumentException("Function definition must be a AWSInvokeRequestDefinition");
         }
-        InvokeRequest.Builder invokeRequestBuilder = ((AWSInvokeRequestDefinition) definition).getInvokeRequestBuilder();
+        InvokeRequest.Builder invokeRequestBuilder = ((AwsInvokeRequestDefinition) definition).getInvokeRequestBuilder();
         boolean isReactiveType = Publishers.isConvertibleToPublisher(outputType.getType());
         if (isReactiveType) {
             final Mono<Object> invokeFlowable = Mono.<InvokeResponse>create(emitter -> {
@@ -141,7 +141,7 @@ public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, F
     @SuppressWarnings("unchecked")
     @Override
     public <I1, O2> Optional<FunctionInvoker<I1, O2>> choose(FunctionDefinition definition) {
-        if (definition instanceof AWSInvokeRequestDefinition) {
+        if (definition instanceof AwsInvokeRequestDefinition) {
             return Optional.of((FunctionInvoker) this);
         }
         return Optional.empty();

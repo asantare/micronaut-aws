@@ -30,7 +30,7 @@ import software.amazon.awssdk.services.lambda.*;
 /**
  * Factory that creates a Lambda client.
  *
- * @since 3.7.1
+ * @since 3.8.0
  */
 @Factory
 public class LambdaClientFactory extends AwsClientFactory<LambdaClientBuilder, LambdaAsyncClientBuilder, LambdaClient, LambdaAsyncClient> {
