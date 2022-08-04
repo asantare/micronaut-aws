@@ -15,7 +15,7 @@
  */
 package io.micronaut.function.client.aws
 
-import io.micronaut.aws.sdk.v2.service.lambda.LambdaConfigurationProperties
+
 import io.micronaut.context.ApplicationContext
 import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.core.type.Argument
@@ -62,8 +62,8 @@ class AwsLambdaInvokeSpec extends Specification {
 
         then:
         invokeRequestDefinition.name == 'test'
-        invokeRequestDefinition.invokeRequest.functionName == 'micronaut-function'
-        invokeRequestDefinition.invokeRequest.qualifier == 'something'
+        invokeRequestDefinition.invokeRequestBuilder.functionName == 'micronaut-function'
+        invokeRequestDefinition.invokeRequestBuilder.qualifier == 'something'
 
         cleanup:
         applicationContext.close()
@@ -76,13 +76,11 @@ class AwsLambdaInvokeSpec extends Specification {
                 'aws.lambda.functions.test.qualifier': 'something',
                 'aws.lambda.region': 'us-east-1'
         )
-        LambdaConfigurationProperties configuration = applicationContext.getBean(LambdaConfigurationProperties)
         FunctionDefinition definition = applicationContext.getBean(FunctionDefinition)
         FunctionInvokerChooser chooser = applicationContext.getBean(FunctionInvokerChooser)
         Optional<FunctionInvoker> invoker = chooser.choose(definition)
 
         expect:
-        configuration.builder.region == 'us-east-1'
         invoker.isPresent()
 
         cleanup:

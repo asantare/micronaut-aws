@@ -34,8 +34,12 @@ import software.amazon.awssdk.services.lambda.model.InvokeRequest;
 public class AWSInvokeRequestDefinition implements FunctionDefinition {
     public static final String AWS_LAMBDA_FUNCTIONS = AWSConfiguration.PREFIX + ".lambda.functions";
 
+    @ConfigurationBuilder(prefixes = {""}, excludes = {"profileFile", "applyMutation"})
+    protected InvokeRequest.Builder invokeRequestBuilder;
+
     private final String name;
-    
+
+
     /**
      * Constructor.
      *
@@ -43,14 +47,15 @@ public class AWSInvokeRequestDefinition implements FunctionDefinition {
      */
     public AWSInvokeRequestDefinition(@Parameter String name) {
         this.name = name;
+        this.invokeRequestBuilder = InvokeRequest.builder();
+        this.invokeRequestBuilder.functionName(name);
     }
 
     /**
      * @return The {@link InvokeRequest} definition
      */
-    @ConfigurationBuilder
-    public InvokeRequest.Builder getInvokeRequest() {
-        return InvokeRequest.builder().functionName(this.name);
+    public InvokeRequest.Builder getInvokeRequestBuilder() {
+        return invokeRequestBuilder;
     }
 
     @Override

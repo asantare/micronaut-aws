@@ -50,7 +50,7 @@ import java.util.concurrent.ExecutorService;
 @Requires(beans = LambdaAsyncClient.class)
 @Singleton
 public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, FunctionInvokerChooser {
-    
+
     private static final int STATUS_CODE_ERROR = 300;
     private final LambdaAsyncClient asyncClient;
     private final ByteBufferFactory byteBufferFactory;
@@ -82,7 +82,7 @@ public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, F
         if (!(definition instanceof AWSInvokeRequestDefinition)) {
             throw new IllegalArgumentException("Function definition must be a AWSInvokeRequestDefinition");
         }
-        InvokeRequest.Builder invokeRequestBuilder = ((AWSInvokeRequestDefinition) definition).getInvokeRequest();
+        InvokeRequest.Builder invokeRequestBuilder = ((AWSInvokeRequestDefinition) definition).getInvokeRequestBuilder();
         boolean isReactiveType = Publishers.isConvertibleToPublisher(outputType.getType());
         if (isReactiveType) {
             final Mono<Object> invokeFlowable = Mono.<InvokeResponse>create(emitter -> {
@@ -120,6 +120,11 @@ public class AWSLambdaFunctionExecutor<I, O> implements FunctionInvoker<I, O>, F
         if (statusCode >= STATUS_CODE_ERROR) {
             throw new FunctionExecutionException("Error executing AWS Lambda [" + definition.getName() + "]: " + invokeResponse.functionError());
         }
+
+        if (outputType.equalsType(Argument.VOID)) {
+            return null;
+        }
+
         io.micronaut.core.io.buffer.ByteBuffer byteBuffer = byteBufferFactory.copiedBuffer(invokeResponse.payload().asByteBuffer());
 
         return jsonMediaTypeCodec.decode(outputType, byteBuffer);

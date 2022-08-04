@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * Configuration properties for Lambda.
  *
- * @since 4.0.0
+ * @since 3.7.1
  */
 @ConfigurationProperties(LambdaClient.SERVICE_NAME)
 public class LambdaConfigurationProperties extends AWSConfiguration {
@@ -42,7 +42,7 @@ public class LambdaConfigurationProperties extends AWSConfiguration {
     /**
      * The metric publishers
      *
-     * @return
+     * @return list of configured metric publishers
      */
     public List<MetricPublisher> getMetricsPublishers() {
         return metricsPublishers;
@@ -52,7 +52,7 @@ public class LambdaConfigurationProperties extends AWSConfiguration {
      * @param metricsPublishers The {@link MetricPublisher}s
      */
     @Inject
-    public void setMetricsCollector(List<MetricPublisher> metricsPublishers) {
+    public void setMetricsPublishers(List<MetricPublisher> metricsPublishers) {
         this.metricsPublishers = metricsPublishers;
     }
 
