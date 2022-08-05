@@ -27,6 +27,8 @@ import io.micronaut.http.annotation.Body
 import jakarta.inject.Named
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Flux
+import software.amazon.awssdk.services.lambda.model.InvocationType
+import software.amazon.awssdk.services.lambda.model.InvokeRequest
 import spock.lang.Ignore
 import spock.lang.IgnoreIf
 import spock.lang.Specification
@@ -48,6 +50,7 @@ class AwsLambdaInvokeSpec extends Specification {
         given:
         ApplicationContext applicationContext = ApplicationContext.run(
                 'aws.lambda.functions.test.function-name': 'micronaut-function',
+                'aws.lambda.functions.test.invocation-type': 'Event',
                 'aws.lambda.functions.test.qualifier': 'something'
         )
 
@@ -64,6 +67,8 @@ class AwsLambdaInvokeSpec extends Specification {
         invokeRequestDefinition.name == 'test'
         invokeRequestDefinition.invokeRequestBuilder.functionName == 'micronaut-function'
         invokeRequestDefinition.invokeRequestBuilder.qualifier == 'something'
+        invokeRequestDefinition.invokeRequestBuilder.invocationType == 'Event'
+        (invokeRequestDefinition.invokeRequestBuilder.build() as InvokeRequest).invocationType() == InvocationType.EVENT
 
         cleanup:
         applicationContext.close()
